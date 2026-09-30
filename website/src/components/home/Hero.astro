@@ -1,0 +1,59 @@
+---
+import Icon from "../Icon.astro";
+import AppMockup from "./AppMockup.astro";
+import { site } from "../../config/site";
+---
+
+<section class="hero container">
+  <div class="hero-copy">
+    <a href="/download/" class="release-chip">
+      <span class="status-dot"></span> IN THE WORKSHOP{" "}
+      <span>
+        v{site.version} <Icon size={12} />
+      </span>
+    </a>
+    <p class="eyebrow">AUTOMATIC GAME SAVE BACKUP</p>
+    <h1>
+      Your bad decisions
+      <br />
+      are <span>reversible.</span>
+    </h1>
+    <p class="hero-tagline">Git for your game saves.</p>
+    <p class="hero-description">
+      Games overwrite saves. Save Scum doesn’t.
+      <br />
+      Keep a local version history of your save files, create checkpoints, and
+      return to a moment before it all went sideways.
+    </p>
+    <div class="actions">
+      <a href="/download/" class="button">
+        {site.downloadUrl ? "Download Save Scum" : "Get Save Scum"}{" "}
+        <Icon name="down" size={17} />
+      </a>
+      <a href={site.githubUrl || "/how-it-works/"} class="button secondary">
+        {site.githubUrl ? "View source" : "See how it works"} <Icon size={16} />
+      </a>
+    </div>
+    <p class="hero-platform">
+      macOS development build · Windows & Linux verification pending
+    </p>
+    <p class="ownership-line">
+      <Icon name="shield" size={15} /> Local-first. No account. No subscription.
+    </p>
+  </div>
+  <AppMockup />
+</section>
+<div class="trust-strip container">
+  <span>
+    <Icon name="watch" size={16} /> AUTOMATIC SNAPSHOTS
+  </span>
+  <span>
+    <Icon name="history" size={16} /> REVERSIBLE RESTORE
+  </span>
+  <span>
+    <Icon name="shield" size={16} /> YOUR SAVES STAY YOURS
+  </span>
+  <span>
+    <Icon name="code" size={16} /> RUST AT THE CORE
+  </span>
+</div>

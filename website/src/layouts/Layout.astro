@@ -1,0 +1,36 @@
+---
+import SEOHead from "../components/seo/SEOHead.astro";
+import OrganizationSchema from "../components/seo/OrganizationSchema.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import HouseEdgeAnalytics from "../components/HouseEdgeAnalytics.astro";
+import "../styles/global.css";
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  noindex?: boolean;
+  type?: "website" | "article";
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead {...Astro.props} />
+    <OrganizationSchema />
+    <HouseEdgeAnalytics />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <Navbar />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

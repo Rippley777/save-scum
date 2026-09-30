@@ -1,0 +1,128 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SoftwareSchema from "../components/seo/SoftwareSchema.astro";
+import Hero from "../components/home/Hero.astro";
+import ProblemSection from "../components/home/ProblemSection.astro";
+import Features from "../components/home/Features.astro";
+import PanicButton from "../components/home/PanicButton.astro";
+import LocalStorage from "../components/home/LocalStorage.astro";
+import HowItWorks from "../components/home/HowItWorks.astro";
+import GameLibrary from "../components/home/GameLibrary.astro";
+import Comparison from "../components/home/Comparison.astro";
+import DownloadCTA from "../components/home/DownloadCTA.astro";
+import Icon from "../components/Icon.astro";
+import { useCases, faq } from "../config/content";
+import { site } from "../config/site";
+---
+
+<Layout
+  title="Save Scum — Automatic Game Save Backup & Version History"
+  description="Automatically back up and version your PC game saves with Save Scum. Keep local snapshots and restore earlier captured saves after an overwrite or bad decision."
+>
+  <SoftwareSchema slot="head" />
+  <Hero />
+  <ProblemSection />
+  <Features />
+  <PanicButton />
+  <LocalStorage />
+  <HowItWorks />
+  <GameLibrary />
+  <section class="section container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow section-label">WE’VE ALL BEEN THERE.</p>
+        <h2>Built for the moments when…</h2>
+      </div>
+    </div>
+    <div class="use-cases">
+      {useCases.map(([title, text], i) => (
+        <article>
+          <span class="use-index">0{i + 1}</span>
+          <h3>{title}</h3>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+    <a class="text-link" href="/guides/how-to-restore-overwritten-game-save/">
+      Already lost a save? Start with the recovery guide <Icon size={16} />
+    </a>
+  </section>
+  <Comparison />
+  <section class="container engine-section">
+    <div>
+      <p class="eyebrow section-label">SMALL APP. SERIOUS ENGINE.</p>
+      <h2>
+        Built in Rust.
+        <br />
+        Built to keep the original.
+      </h2>
+      <p class="section-copy">
+        The native engine hashes and verifies snapshots, stages restores, and
+        preserves a safety checkpoint before replacing files. The interface
+        stays simple. The filesystem work takes the careful route.
+      </p>
+      <a href={site.githubUrl || "/docs/"} class="text-link">
+        {site.githubUrl
+          ? "Explore the source"
+          : "Read the storage & restore documentation"}{" "}
+        <Icon size={16} />
+      </a>
+    </div>
+    <div class="engine-log">
+      <div>
+        <span class="window-dots" aria-hidden="true">
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
+        <span>RESTORE SEQUENCE · ILLUSTRATION</span>
+      </div>
+      <ol>
+        <li>
+          <span>01</span> Verify snapshot files <b>✓</b>
+        </li>
+        <li>
+          <span>02</span> Stage selected version <b>✓</b>
+        </li>
+        <li>
+          <span>03</span> Preserve current state <b>✓</b>
+        </li>
+        <li>
+          <span>04</span> Restore & verify <b>✓</b>
+        </li>
+      </ol>
+      <p>
+        <Icon name="shield" size={15} /> A way back from your way back.
+      </p>
+    </div>
+  </section>
+  <section class="section container home-faq">
+    <div>
+      <p class="eyebrow section-label">GOOD QUESTIONS.</p>
+      <h2>Before you rewind.</h2>
+      <a class="text-link" href="/faq/">
+        Read all FAQs <Icon size={16} />
+      </a>
+    </div>
+    <div>
+      {faq.slice(0, 3).map((item) => (
+        <article>
+          <h3>{item.question}</h3>
+          <p>{item.answer}</p>
+          {item.href && <a href={item.href}>{item.link}</a>}
+        </article>
+      ))}
+    </div>
+  </section>
+  <section class="container guide-banner">
+    <Icon name="folder" size={25} />
+    <div>
+      <h2>A better backup starts with knowing your saves.</h2>
+      <p>Find the folder, keep a copy, and test your way back.</p>
+    </div>
+    <a href="/guides/how-to-back-up-game-saves/" class="text-link">
+      Read the PC save backup guide <Icon size={16} />
+    </a>
+  </section>
+  <DownloadCTA />
+</Layout>

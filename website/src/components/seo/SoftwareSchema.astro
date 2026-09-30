@@ -1,0 +1,33 @@
+---
+import JsonLd from "./JsonLd.astro";
+import { site, absoluteUrl } from "../../config/site";
+const data = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": absoluteUrl("/#software"),
+  name: site.name,
+  description: site.description,
+  url: absoluteUrl("/"),
+  image: absoluteUrl(site.image),
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: site.verifiedOS,
+  softwareVersion: site.version,
+  releaseNotes: absoluteUrl("/download/"),
+  publisher: { "@id": `${site.publisherUrl}/#organization` },
+  isAccessibleForFree: true,
+  ...(site.downloadUrl
+    ? {
+        downloadUrl: site.downloadUrl,
+        offers: {
+          "@type": "Offer",
+          price: site.price,
+          priceCurrency: "USD",
+          url: absoluteUrl("/download/"),
+        },
+      }
+    : {}),
+  ...(site.licenseUrl ? { license: site.licenseUrl } : {}),
+};
+---
+
+<JsonLd data={data} />

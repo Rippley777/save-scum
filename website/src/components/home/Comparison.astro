@@ -1,0 +1,75 @@
+---
+const rows = [
+  ["Save history", "Captured versions", "What you keep", "Service-dependent"],
+  [
+    "Automatic snapshots",
+    "Yes, while watching",
+    "No, unless scripted",
+    "Sync, not necessarily history",
+  ],
+  [
+    "Restore a checkpoint",
+    "Visual timeline",
+    "Copy files manually",
+    "Service-dependent",
+  ],
+  ["Local ownership", "Yes", "Yes", "Depends on service"],
+  ["Panic shortcut", "Yes, where supported", "No", "Not its purpose"],
+  [
+    "Deduplication",
+    "File-level",
+    "Not by ordinary copying",
+    "Service-dependent",
+  ],
+  ["Works offline", "Yes", "Yes", "Sync needs a connection"],
+];
+---
+
+<section class="section container comparison-section">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow section-label">
+        COMPLEMENT YOUR CLOUD. KEEP YOUR PAST.
+      </p>
+      <h2>Same saves. Different jobs.</h2>
+    </div>
+  </div>
+  <div
+    class="table-scroll"
+    role="region"
+    aria-label="Backup method comparison"
+    tabindex="0"
+  >
+    <table>
+      <caption class="sr-only">
+        How Save Scum, manual backups, and cloud synchronization differ
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">What matters</th>
+          <th scope="col">Save Scum</th>
+          <th scope="col">Manual backups</th>
+          <th scope="col">Cloud saves</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr>
+            <th scope="row">{row[0]}</th>
+            {row.slice(1).map((cell) => (
+              <td>{cell}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="comparison-note">
+    <strong>Cloud sync and Save Scum solve different problems.</strong>{" "}
+    Synchronization helps keep the newest state across devices. Save Scum
+    preserves previous states locally.{" "}
+    <a href="/guides/how-to-back-up-steam-saves/">
+      Learn how to back up Steam saves.
+    </a>
+  </p>
+</section>

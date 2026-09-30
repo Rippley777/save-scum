@@ -1,0 +1,34 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/seo/Breadcrumbs.astro";
+import { faq } from "../config/content";
+---
+
+<Layout
+  title="Save Scum FAQ — Game Save Backup & Recovery"
+  description="Honest answers about game save backups, Steam Cloud, overwritten and corrupted saves, offline use, storage, and Save Scum platform availability."
+>
+  <div class="container">
+    <Breadcrumbs items={[{ name: "FAQ", href: "/faq/" }]} />
+    <header class="page-hero">
+      <p class="eyebrow">BEFORE YOU REWIND</p>
+      <h1>
+        Good questions.
+        <br />
+        Straight answers.
+      </h1>
+      <p class="lead">
+        What Save Scum keeps, what it can restore, and where the limits are.
+      </p>
+    </header>
+    <div class="faq-list">
+      {faq.map((item, index) => (
+        <article id={`question-${index + 1}`}>
+          <h2>{item.question}</h2>
+          <p>{item.answer}</p>
+          {item.href && <a href={item.href}>{item.link} →</a>}
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>

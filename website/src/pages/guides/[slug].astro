@@ -1,0 +1,52 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import ContentLayout from "../../layouts/ContentLayout.astro";
+export async function getStaticPaths() {
+  return (await getCollection("guides")).map((guide) => ({
+    params: { slug: guide.id },
+    props: { guide },
+  }));
+}
+interface Props {
+  guide: CollectionEntry<"guides">;
+}
+const { guide } = Astro.props;
+const { Content, headings } = await render(guide);
+const toc = headings
+  .filter((h) => h.depth === 2)
+  .map((h) => ({ text: h.text, slug: h.slug }));
+---
+
+<ContentLayout
+  title={guide.data.seoTitle}
+  description={guide.data.description}
+  heading={guide.data.title}
+  lead={guide.data.summary}
+  eyebrow={guide.data.category}
+  breadcrumbs={[
+    { name: "Guides", href: "/guides/" },
+    { name: guide.data.title, href: `/guides/${guide.id}/` },
+  ]}
+  toc={toc}
+  type="article"
+>
+  <div slot="meta" class="article-meta">
+    <span>By Rippley Labs</span>
+    <span>
+      Reviewed{" "}
+      <time datetime={guide.data.reviewed}>
+        {new Date(`${guide.data.reviewed}T12:00:00Z`).toLocaleDateString(
+          "en-US",
+          { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" },
+        )}
+      </time>
+    </span>
+  </div>
+  <Content />
+  <h2>Keep exploring</h2>
+  <p>
+    <a href="/guides/">Browse all backup and recovery guides</a>,{" "}
+    <a href="/features/">explore Save Scum’s snapshot tools</a>, or{" "}
+    <a href="/download/">check current release availability</a>.
+  </p>
+</ContentLayout>

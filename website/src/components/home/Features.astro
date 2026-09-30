@@ -1,0 +1,68 @@
+---
+import Icon from "../Icon.astro";
+import { features } from "../../config/content";
+---
+
+<section
+  class="section container"
+  id="features"
+  aria-labelledby="features-title"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow section-label">
+        02 / SAVE EARLY. SAVE OFTEN. KEEP BOTH.
+      </p>
+      <h2 id="features-title">A safety net for your next session.</h2>
+    </div>
+    <a href="/features/" class="text-link">
+      Explore the toolkit <Icon size={16} />
+    </a>
+  </div>
+  <div class="feature-grid">
+    {features.map((feature, i) => (
+      <article class:list={["feature-card", `feature-${i}`]}>
+        <div class="feature-icon">
+          <Icon name={feature.icon} size={23} />
+        </div>
+        <h3>{feature.title}</h3>
+        <p>{feature.text}</p>
+        {i === 0 ? (
+          <div class="file-activity" aria-hidden="true">
+            <span>
+              world.sav <b>changed</b>
+            </span>
+            <span class="file-connector">↓</span>
+            <span>
+              <Icon name="check" size={14} /> snapshot preserved
+            </span>
+          </div>
+        ) : i === 1 ? (
+          <div class="mini-history" aria-hidden="true">
+            <span>●</span>
+            <i></i>
+            <span>●</span>
+            <i></i>
+            <span class="history-selected">↶</span>
+            <i></i>
+            <span>●</span>
+          </div>
+        ) : (
+          <div class="checkpoint-tags">
+            <span>★ Before final boss</span>
+            <span>★ Before mod install</span>
+          </div>
+        )}
+        <p class="feature-detail">{feature.detail}</p>
+        <a href={feature.href} class="text-link">
+          {i === 0
+            ? "How capture works"
+            : i === 1
+              ? "Restore a previous save"
+              : "Keep a checkpoint"}{" "}
+          <Icon size={14} />
+        </a>
+      </article>
+    ))}
+  </div>
+</section>

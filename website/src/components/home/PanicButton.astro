@@ -1,0 +1,68 @@
+---
+import Icon from "../Icon.astro";
+---
+
+<section class="container panic-section" aria-labelledby="panic-title">
+  <div class="panic-copy">
+    <p class="eyebrow">
+      <Icon name="bolt" size={15} /> THE PANIC BUTTON
+    </p>
+    <h2 id="panic-title">
+      About to make a<br />
+      terrible decision?
+    </h2>
+    <p>
+      Hit the Panic Button. Capture the files your game has already saved before
+      you discover what that mysterious lever does.
+    </p>
+    <div class="shortcut">
+      <kbd>Ctrl</kbd>
+      <span>+</span>
+      <kbd>Shift</kbd>
+      <span>+</span>
+      <kbd>F12</kbd>
+    </div>
+    <p class="small-copy">
+      Trigger it from the app, tray, or global shortcut. Availability depends on
+      your platform. It captures saved files, not unsaved in-game memory.
+    </p>
+  </div>
+  <div class="panic-demo">
+    <span class="micro-label">FOR SCIENCE. OBVIOUSLY.</span>
+    <button
+      type="button"
+      class="panic-switch"
+      data-panic
+      aria-label="Try the Panic Save demo"
+    >
+      <Icon name="bolt" size={32} />
+      <span>PANIC SAVE</span>
+      <small>TRY IT</small>
+    </button>
+    <div class="panic-notification" data-panic-result role="status">
+      <span class="panic-notification-icon">
+        <Icon name="shield" size={20} />
+      </span>
+      <div>
+        <strong data-panic-title>A little insurance for your curiosity.</strong>
+        <p data-panic-message>Interactive demo · no files are accessed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  const trigger = document.querySelector<HTMLButtonElement>("[data-panic]");
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  trigger?.addEventListener("click", () => {
+    clearTimeout(timer);
+    trigger.classList.add("is-saved");
+    const title = document.querySelector("[data-panic-title]");
+    const message = document.querySelector("[data-panic-message]");
+    if (title) title.textContent = "DEMO PANIC SAVE CREATED";
+    if (message)
+      message.textContent =
+        "Bad idea detected. Evidence preserved. (Simulated.)";
+    document.querySelector("[data-panic-result]")?.classList.add("saved");
+    timer = setTimeout(() => trigger.classList.remove("is-saved"), 550);
+  });
+</script>

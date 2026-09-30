@@ -1,0 +1,97 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { gameDefinitions } from "../config/games";
+---
+
+<ContentLayout
+  title="Game Save Locations & Compatibility | Save Scum"
+  heading="Find the folder. Protect the progress."
+  description="Understand where games store saves, how Save Scum discovers local folders, and the difference between a location template and verified game compatibility."
+  breadcrumbs={[{ name: "Games & save folders", href: "/games/" }]}
+  eyebrow="YOUR LIBRARY. YOUR FILES."
+>
+  <p>
+    Save Scum can monitor ordinary local save directories without Steam. It does
+    not parse every game’s save format or capture server-only progress. A
+    bundled discovery definition helps find a folder; it does not certify every
+    edition, operating system, or mod setup.
+  </p>
+  <h2>Start with the game’s own documentation</h2>
+  <p>
+    Save paths vary by operating system, store, profile, and game version. Check
+    publisher instructions first. Make a normal in-game save, exit, and verify
+    that the expected files changed. Some games spread profile data and world
+    files across more than one location; understand the complete set before
+    restoring.
+  </p>
+  <p>
+    Common starting points include <code>Documents</code>,{" "}
+    <code>Saved Games</code>, Windows <code>AppData</code>, macOS{" "}
+    <code>Library/Application Support</code>, and Linux configuration
+    directories. Steam userdata and Proton prefixes may also contain saves. None
+    is a universal folder for every PC game.
+  </p>
+  <h2>Bundled discovery templates</h2>
+  <p>
+    The current app includes {gameDefinitions.length} named definitions. The
+    paths below are hints copied from the application’s configuration, not
+    tested compatibility claims. A wildcard <code>*</code> stands for a profile
+    or account-specific directory. Verify the files before using a match.
+  </p>
+  {gameDefinitions.map((game) => (
+    <section>
+      <h3>{game.name}</h3>
+      <dl class="path-list">
+        {Object.entries(game.paths)
+          .filter(([, paths]) => paths.length)
+          .map(([platform, paths]) => (
+            <div>
+              <dt>
+                {platform === "macos"
+                  ? "macOS"
+                  : platform === "windows"
+                    ? "Windows"
+                    : "Linux / Proton"}{" "}
+                location template
+              </dt>
+              <dd>
+                {paths.map((path) => (
+                  <div>
+                    <code>{path}</code>
+                  </div>
+                ))}
+              </dd>
+            </div>
+          ))}
+      </dl>
+    </section>
+  ))}
+  <h2>Installed does not mean located</h2>
+  <p>
+    The app can discover installed Steam games from common library locations. If
+    the save path is unknown, it labels the game as installed and asks you to
+    choose the actual save folder. An installation directory is never
+    automatically assumed to hold your progress. Custom Steam libraries and
+    unrecognized locations can be added manually.
+  </p>
+  <h2>Before you trust a backup</h2>
+  <ol>
+    <li>
+      Confirm the watched directory contains the current profile’s real files.
+    </li>
+    <li>Capture a snapshot and inspect its file count and path.</li>
+    <li>
+      Keep an independent copy while testing a restore with the game closed.
+    </li>
+    <li>
+      Verify that the game loads the expected state and that cloud sync does not
+      replace it.
+    </li>
+  </ol>
+  <p>
+    See <a href="/how-it-works/">the setup walkthrough</a> or{" "}
+    <a href="/guides/how-to-back-up-steam-saves/">the Steam backup guide</a> for
+    more detail. Product and game names identify compatibility contexts only;
+    Save Scum is not affiliated with Valve or the listed publishers.
+  </p>
+</ContentLayout>

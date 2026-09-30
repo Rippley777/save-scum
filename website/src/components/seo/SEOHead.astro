@@ -1,0 +1,69 @@
+---
+import { site, absoluteUrl } from "../../config/site";
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  noindex?: boolean;
+  type?: "website" | "article";
+}
+const {
+  title,
+  description,
+  canonical = Astro.url.pathname,
+  image = site.image,
+  noindex = false,
+  type = "website",
+} = Astro.props;
+const canonicalUrl = absoluteUrl(canonical);
+if (new URL(canonicalUrl).origin !== site.canonicalUrl)
+  throw new Error("Canonical URL must use the configured production origin.");
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<meta
+  name="robots"
+  content={
+    noindex || site.noindex
+      ? "noindex, follow"
+      : "index, follow, max-image-preview:large"
+  }
+/>
+<meta name="theme-color" content="#101310" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content={absoluteUrl(image)} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta
+  property="og:image:alt"
+  content="Save Scum — Git for your game saves, with a timeline of automatic snapshots, a Before Boss checkpoint, and a Panic Save."
+/>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={absoluteUrl(image)} />
+<meta name="twitter:image:alt" content="Save Scum game save snapshot history" />
+{site.googleVerification && (
+  <meta name="google-site-verification" content={site.googleVerification} />
+)}
+{site.bingVerification && (
+  <meta name="msvalidate.01" content={site.bingVerification} />
+)}
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link
+  rel="preload"
+  href="/fonts/manrope-latin-variable.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>

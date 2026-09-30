@@ -1,0 +1,21 @@
+{
+  "trailingSlash": "always",
+  "responseOverrides": { "404": { "rewrite": "/404.html", "statusCode": 404 } },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "X-Frame-Options": "DENY",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+  },
+  "routes": [
+    {
+      "route": "/_astro/*",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "route": "/fonts/*",
+      "headers": { "Cache-Control": "public, max-age=86400" }
+    }
+  ]
+}

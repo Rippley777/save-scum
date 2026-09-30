@@ -1,0 +1,86 @@
+// Discovery templates from the desktop app’s data/games.json, reviewed 2026-09-30.
+// These are location hints, not a cross-platform compatibility certification.
+export const gameDefinitions = [
+  {
+    name: "Baldur's Gate 3",
+    steamAppId: "1086940",
+    executables: ["bg3.exe", "bg3_dx11.exe", "Baldur's Gate 3"],
+    paths: {
+      windows: [
+        "%LOCALAPPDATA%/Larian Studios/Baldur's Gate 3/PlayerProfiles/*/Savegames/Story",
+      ],
+      linux: [
+        "~/.local/share/Steam/steamapps/compatdata/1086940/pfx/drive_c/users/steamuser/AppData/Local/Larian Studios/Baldur's Gate 3/PlayerProfiles/*/Savegames/Story",
+      ],
+      macos: [
+        "~/Documents/Larian Studios/Baldur's Gate 3/PlayerProfiles/*/Savegames/Story",
+      ],
+    },
+  },
+  {
+    name: "Elden Ring",
+    steamAppId: "1245620",
+    executables: ["eldenring.exe"],
+    paths: {
+      windows: ["%APPDATA%/EldenRing/*"],
+      linux: [
+        "~/.local/share/Steam/steamapps/compatdata/1245620/pfx/drive_c/users/steamuser/AppData/Roaming/EldenRing/*",
+      ],
+      macos: [],
+    },
+  },
+  {
+    name: "Stardew Valley",
+    steamAppId: "413150",
+    executables: ["Stardew Valley.exe", "StardewValley", "Stardew Valley"],
+    paths: {
+      windows: ["%APPDATA%/StardewValley/Saves"],
+      linux: ["~/.config/StardewValley/Saves"],
+      macos: ["~/.config/StardewValley/Saves"],
+    },
+  },
+  {
+    name: "Hollow Knight",
+    steamAppId: "367520",
+    executables: ["hollow_knight.exe", "hollow_knight", "Hollow Knight"],
+    paths: {
+      windows: ["%USERPROFILE%/AppData/LocalLow/Team Cherry/Hollow Knight"],
+      linux: ["~/.config/unity3d/Team Cherry/Hollow Knight"],
+      macos: ["~/Library/Application Support/unity.Team Cherry.Hollow Knight"],
+    },
+  },
+  {
+    name: "Cyberpunk 2077",
+    steamAppId: "1091500",
+    executables: ["Cyberpunk2077.exe"],
+    paths: {
+      windows: ["%USERPROFILE%/Saved Games/CD Projekt Red/Cyberpunk 2077"],
+      linux: [
+        "~/.local/share/Steam/steamapps/compatdata/1091500/pfx/drive_c/users/steamuser/Saved Games/CD Projekt Red/Cyberpunk 2077",
+      ],
+      macos: [],
+    },
+  },
+  {
+    name: "Hades",
+    steamAppId: "1145360",
+    executables: ["Hades.exe", "Hades"],
+    paths: {
+      windows: ["%USERPROFILE%/Documents/Saved Games/Hades"],
+      linux: [
+        "~/.local/share/Steam/steamapps/compatdata/1145360/pfx/drive_c/users/steamuser/Documents/Saved Games/Hades",
+      ],
+      macos: ["~/Library/Application Support/Supergiant Games/Hades"],
+    },
+  },
+  {
+    name: "Backpack Hero",
+    steamAppId: "1970580",
+    executables: ["Backpack Hero", "Backpack Hero.exe"],
+    paths: {
+      windows: ["%USERPROFILE%/AppData/LocalLow/TheJaspel/Backpack Hero"],
+      linux: [],
+      macos: ["~/Library/Application Support/TheJaspel/Backpack Hero"],
+    },
+  },
+];

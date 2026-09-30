@@ -1,0 +1,78 @@
+---
+import Icon from "../Icon.astro";
+---
+
+<section class="section container local-storage-grid">
+  <div class="local-panel">
+    <p class="eyebrow section-label">03 / NO CLOUD HANGING OVER YOU</p>
+    <h2>
+      Your saves stay
+      <br />
+      on your machine.
+    </h2>
+    <p class="section-copy">
+      Your save history belongs to you. Save Scum works locally and stores
+      snapshots on storage you control.
+    </p>
+    <ul class="privacy-list">
+      {[
+        "No account",
+        "No subscription",
+        "No cloud required",
+        "No telemetry",
+        "Portable archives",
+        "Works offline",
+      ].map((label) => (
+        <li>
+          <Icon name="check" size={16} />
+          {label}
+        </li>
+      ))}
+    </ul>
+    <p class="small-copy">
+      Local history protects against a bad save. An extra copy on another device
+      protects against a bad drive.
+    </p>
+  </div>
+  <div class="storage-panel">
+    <div class="storage-title">
+      <Icon name="folder" size={23} />
+      <span class="micro-label">LESS COPYING. MORE KEEPING.</span>
+    </div>
+    <h3>
+      Hundreds of snapshots.
+      <br />
+      Not hundreds of copies.
+    </h3>
+    <p>
+      Unchanged files are shared between snapshots. New file contents are
+      hashed, compressed, and stored once.
+    </p>
+    <div
+      class="dedup-diagram"
+      aria-label="Snapshots 41, 42, and 43 share the same world save. Changed player saves use separate stored files."
+    >
+      <div>
+        <span>snapshot 41</span>
+        <span>snapshot 42</span>
+        <span>snapshot 43</span>
+      </div>
+      <div class="dedup-lines" aria-hidden="true">
+        ⎫<br />⎬<br />⎭
+      </div>
+      <div>
+        <span class="blob">
+          world.sav <b>one shared file</b>
+        </span>
+        <small>player.sav changes → new file</small>
+      </div>
+    </div>
+    <p class="small-copy">
+      Illustrative file relationships. Storage savings depend on your saves;
+      compression does not guarantee a particular ratio.
+    </p>
+    <a href="/features/#storage" class="text-link">
+      Inside snapshot storage <Icon size={15} />
+    </a>
+  </div>
+</section>

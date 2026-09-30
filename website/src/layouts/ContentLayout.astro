@@ -1,0 +1,65 @@
+---
+import Layout from "./Layout.astro";
+import Breadcrumbs, { type Crumb } from "../components/seo/Breadcrumbs.astro";
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  eyebrow?: string;
+  breadcrumbs: Crumb[];
+  toc?: { text: string; slug: string }[];
+  type?: "website" | "article";
+  lead?: string;
+}
+const {
+  title,
+  description,
+  heading,
+  eyebrow = "THE SAVE SCUM FIELD GUIDE",
+  breadcrumbs,
+  toc = [],
+  type,
+  lead = description,
+} = Astro.props;
+---
+
+<Layout title={title} description={description} type={type}>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+    <header class="page-hero">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{heading}</h1>
+      <p class="lead">{lead}</p>
+      <slot name="meta" />
+    </header>
+    <div class="content-grid">
+      <article class="prose">
+        <slot />
+      </article>
+      <aside class="content-aside">
+        <nav aria-label={toc.length ? "On this page" : "Explore Save Scum"}>
+          <h2>{toc.length ? "ON THIS PAGE" : "KEEP EXPLORING"}</h2>
+          <ul>
+            {(toc.length
+              ? toc.map((item) => ({ text: item.text, href: `#${item.slug}` }))
+              : [
+                  { text: "Features & restore safeguards", href: "/features/" },
+                  { text: "Set up automatic backups", href: "/how-it-works/" },
+                  { text: "Game save backup guides", href: "/guides/" },
+                  { text: "Release & platform status", href: "/download/" },
+                ]
+            ).map((item) => (
+              <li>
+                <a href={item.href}>{item.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <p>
+          Save Scum restores versions it has already captured. A backup made
+          today can’t recover yesterday’s unrecorded save.
+        </p>
+      </aside>
+    </div>
+  </div>
+</Layout>

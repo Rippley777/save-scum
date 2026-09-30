@@ -1,0 +1,148 @@
+---
+import Icon from "../Icon.astro";
+const snapshots = [
+  {
+    time: "10:42 PM",
+    name: "Automatic snapshot",
+    meta: "3 files changed · 12.4 MB",
+    kind: "auto",
+    icon: "history",
+  },
+  {
+    time: "10:17 PM",
+    name: "Before I touch this weird machine",
+    meta: "Manual checkpoint · Protected",
+    kind: "checkpoint",
+    icon: "flag",
+  },
+  {
+    time: "9:54 PM",
+    name: "PANIC SAVE",
+    meta: "Bad idea detected. Evidence preserved.",
+    kind: "panic",
+    icon: "bolt",
+  },
+  {
+    time: "9:31 PM",
+    name: "Automatic snapshot",
+    meta: "1 file changed · 2.1 MB",
+    kind: "auto",
+    icon: "history",
+  },
+];
+---
+
+<figure class="app-figure">
+  <div
+    class="app-window"
+    aria-label="Save Scum interactive timeline demonstration"
+  >
+    <div class="window-bar">
+      <span class="window-dots" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span>Save Scum</span>
+      <span class="tiny-badge">LOCAL</span>
+    </div>
+    <div class="app-shell">
+      <aside class="app-sidebar" aria-label="Illustrative app sidebar">
+        <span class="mini-brand">
+          <Icon name="history" size={19} /> SC
+        </span>
+        <span class="sidebar-item">
+          <Icon name="game" /> Library
+        </span>
+        <span class="sidebar-item selected">
+          <Icon name="history" /> Snapshots
+        </span>
+        <span class="sidebar-item">
+          <Icon name="flag" /> Checkpoints
+        </span>
+        <span class="sidebar-spacer"></span>
+        <span class="sidebar-local">
+          <Icon name="shield" size={15} /> All yours.
+        </span>
+      </aside>
+      <div class="app-content">
+        <div class="app-breadcrumb">
+          Your games <span>/</span> Baldur’s Gate 3
+        </div>
+        <div class="app-game-heading">
+          <div>
+            <span class="micro-label">EVERY SAVE TELLS A STORY</span>
+            <h2>Baldur’s Gate 3</h2>
+          </div>
+          <span class="watching">
+            <i></i> Watching
+          </span>
+        </div>
+        <p class="app-reassurance">Your next “what if” has a way back.</p>
+        <div class="app-toolbar">
+          <span>Save history</span>
+          <button type="button" class="mini-button" data-checkpoint>
+            + Create checkpoint
+          </button>
+        </div>
+        <div class="timeline-day">
+          TODAY <span>4 snapshots · example data</span>
+        </div>
+        <ol class="app-timeline">
+          {snapshots.map((snapshot) => (
+            <li class={snapshot.kind}>
+              <span class="timeline-time">{snapshot.time}</span>
+              <span class="timeline-dot">
+                <Icon name={snapshot.icon} size={13} />
+              </span>
+              <div class="snapshot">
+                <strong>{snapshot.name}</strong>
+                <small>{snapshot.meta}</small>
+                {snapshot.kind === "checkpoint" && (
+                  <button
+                    type="button"
+                    data-restore
+                    aria-label="Preview restoring the manual checkpoint"
+                  >
+                    Restore <Icon name="history" size={12} />
+                  </button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="demo-result" data-demo-result role="status">
+          Demo only. Your files are never accessed.
+        </p>
+      </div>
+    </div>
+    <div class="app-bottom">
+      <span>
+        <i class="status-dot"></i> Monitoring example folder
+      </span>
+      <span>
+        <Icon name="shield" size={12} /> On-device history
+      </span>
+    </div>
+  </div>
+  <figcaption>
+    <span class="figure-line"></span> A LITTLE HISTORY. A LOT OF POSSIBILITIES.{" "}
+    <span>INTERACTIVE PREVIEW</span>
+  </figcaption>
+</figure>
+<script>
+  const result = document.querySelector<HTMLElement>("[data-demo-result]");
+  let count = 0;
+  document.querySelector("[data-checkpoint]")?.addEventListener("click", () => {
+    if (!result) return;
+    count++;
+    result.textContent = `Demo checkpoint ${count} created. In the app, this captures your save files.`;
+    result.classList.add("success");
+  });
+  document.querySelector("[data-restore]")?.addEventListener("click", () => {
+    if (!result) return;
+    result.textContent =
+      "Restore preview: close the game, review changed files, then confirm. The app preserves your current state first.";
+    result.classList.remove("success");
+  });
+</script>

@@ -1,0 +1,51 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import { nav } from "../config/site";
+---
+
+<header class="site-header">
+  <div class="container nav-inner">
+    <Logo />
+    <nav class="desktop-nav" aria-label="Main navigation">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          aria-current={Astro.url.pathname === item.href ? "page" : undefined}
+        >
+          {item.name}
+        </a>
+      ))}
+    </nav>
+    <a class="button button-small nav-cta" href="/download/">
+      Get Save Scum <Icon name="down" size={15} />
+    </a>
+    <details class="mobile-menu">
+      <summary aria-label="Open navigation">
+        <Icon name="menu" />
+      </summary>
+      <nav aria-label="Mobile navigation">
+        {[...nav, { name: "Get Save Scum", href: "/download/" }].map((item) => (
+          <a href={item.href}>{item.name}</a>
+        ))}
+      </nav>
+    </details>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu");
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu?.open) {
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    }
+  });
+  document.addEventListener("click", (event) => {
+    if (
+      menu?.open &&
+      event.target instanceof Node &&
+      !menu.contains(event.target)
+    )
+      menu.open = false;
+  });
+</script>

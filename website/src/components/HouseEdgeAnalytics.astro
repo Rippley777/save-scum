@@ -1,0 +1,41 @@
+---
+const key = import.meta.env.PUBLIC_HOUSE_EDGE_KEY?.trim();
+const configuredEndpoint = import.meta.env.PUBLIC_HOUSE_EDGE_ENDPOINT?.trim();
+const enabled =
+  import.meta.env.PROD ||
+  import.meta.env.PUBLIC_HOUSE_EDGE_TRACK_DEVELOPMENT === "true";
+let endpoint: string | undefined;
+if (enabled && key && configuredEndpoint) {
+  try {
+    const url = new URL(configuredEndpoint);
+    if (
+      ["https:", "http:"].includes(url.protocol) &&
+      !url.username &&
+      !url.password
+    ) {
+      endpoint = url.href;
+    }
+  } catch {
+    /* An invalid analytics URL must not break the website. */
+  }
+}
+---
+
+{endpoint && <meta name="house-edge-endpoint" content={endpoint} />}
+<script>
+  import { houseEdge } from "@house-edge/analytics";
+  const endpoint = document.querySelector<HTMLMetaElement>(
+    'meta[name="house-edge-endpoint"]',
+  )?.content;
+  const key = import.meta.env.PUBLIC_HOUSE_EDGE_KEY?.trim();
+  if (endpoint && key) {
+    houseEdge.init({
+      projectKey:
+        import.meta.env.PUBLIC_HOUSE_EDGE_PROJECT || "save-scum-website",
+      key,
+      endpoint,
+      version: import.meta.env.PUBLIC_APP_VERSION,
+      respectDoNotTrack: true,
+    });
+  }
+</script>

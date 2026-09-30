@@ -1,0 +1,94 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+---
+
+<ContentLayout
+  title="How Save Scum Automatically Backs Up Game Saves"
+  heading="Pick the save folder. Keep the story."
+  description="Set up Save Scum, confirm your first game save snapshot, let the desktop watcher preserve changes, and safely restore an earlier captured state."
+  breadcrumbs={[{ name: "How it works", href: "/how-it-works/" }]}
+  eyebrow="FROM SAVE FILE TO SECOND CHANCE"
+>
+  <p>
+    Save Scum works with ordinary local files. It does not need a Steam account
+    or a game-specific plugin. You choose the folder, it keeps snapshots, and
+    you decide which moment to restore. Check{" "}
+    <a href="/download/">current platform and release status</a> first.
+  </p>
+  <h2>01 — Find where the game actually saves</h2>
+  <p>
+    Choose <strong>Add game</strong> in the desktop app. Detect a known location
+    or select the save directory yourself. Installed-game detection and
+    save-folder discovery are different: finding an installed game does not
+    prove where its saves live.
+  </p>
+  <p>
+    Make a normal in-game save, then confirm the files in the selected folder
+    changed. Select the directory that contains the current progress, not a new
+    folder you created for backups. Save Scum stores snapshots separately. Empty
+    folders cannot provide a usable starting point.
+  </p>
+  <p>
+    <a href="/games/">
+      See save-location guidance and the bundled discovery definitions.
+    </a>
+  </p>
+  <h2>02 — Inspect the first snapshot</h2>
+  <p>
+    The desktop app captures an initial state when you register a usable folder.
+    Open its history and check the file count, path, and captured contents. A
+    successful-looking backup of the wrong directory is still the wrong backup.
+  </p>
+  <p>
+    Create a named checkpoint before your next experiment. Keep an independent
+    copy of important saves while getting familiar with the restore workflow.
+  </p>
+  <h2>03 — Keep playing while the watcher keeps history</h2>
+  <p>
+    Leave Save Scum running with monitoring enabled. After the game writes files
+    and activity settles, the watcher groups changes into a snapshot. It skips
+    unchanged automatic captures and checks file consistency before committing.
+  </p>
+  <p>
+    Pause monitoring when you need to troubleshoot a folder. If the directory
+    becomes unavailable, storage fills up, or capture fails, investigate the
+    reported state rather than assuming every moment was recorded. The app
+    cannot capture unsaved memory or server-only progress.
+  </p>
+  <h2>04 — Restore a moment, carefully</h2>
+  <ol>
+    <li>Exit the game and confirm it is no longer writing saves.</li>
+    <li>
+      Open the game’s history. Select a healthy snapshot from before the
+      unwanted change.
+    </li>
+    <li>Review the destination path and added, changed, and removed files.</li>
+    <li>
+      Confirm the restore. Save Scum preserves the current files in a safety
+      checkpoint before replacing them.
+    </li>
+    <li>
+      Review the result and recovery path. Open the game and verify the expected
+      progress.
+    </li>
+  </ol>
+  <p>
+    If the checkpoint matches the current files, the app reports that no changes
+    are needed. Checkpoints from an old, corrected folder cannot silently
+    overwrite a different save location.
+  </p>
+  <h2>05 — Account for cloud sync and mods</h2>
+  <p>
+    A restored local save may differ from a cloud copy. Follow the game or
+    platform’s sync guidance; do not choose a conflict resolution blindly. A
+    snapshot also does not restore the game executable or your entire mod setup.
+    Keep track of the game and mod versions a save needs.
+  </p>
+  <p>
+    Read{" "}
+    <a href="/guides/how-to-back-up-steam-saves/">the Steam backup guide</a> for
+    sync considerations, or{" "}
+    <a href="/guides/how-to-back-up-game-saves/">the general backup guide</a> to
+    build a wider backup routine.
+  </p>
+</ContentLayout>

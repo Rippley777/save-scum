@@ -1,0 +1,14 @@
+---
+import JsonLd from "./JsonLd.astro";
+import { site } from "../../config/site";
+---
+
+<JsonLd
+  data={{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${site.publisherUrl}/#organization`,
+    name: site.publisher,
+    url: site.publisherUrl,
+  }}
+/>

@@ -1,0 +1,57 @@
+---
+import Icon from "../Icon.astro";
+const games = [
+  { name: "Baldur’s Gate 3", glyph: "◇", count: 47, time: "4m ago" },
+  { name: "Cyberpunk 2077", glyph: "⌁", count: 112, time: "38m ago" },
+  { name: "Stardew Valley", glyph: "✳", count: 86, time: "yesterday" },
+  { name: "Hollow Knight", glyph: "♧", count: 124, time: "2 days ago" },
+];
+---
+
+<section class="section container library-section">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow section-label">05 / YOUR ENTIRE COLLECTION, COVERED</p>
+      <h2>A library worth protecting.</h2>
+      <p class="section-copy">
+        One place for the games you keep coming back to.
+      </p>
+    </div>
+    <a href="/games/" class="text-link">
+      Save locations & compatibility <Icon size={16} />
+    </a>
+  </div>
+  <div class="library-window">
+    <div class="library-header">
+      <span>
+        <Icon name="game" size={18} /> YOUR GAMES
+      </span>
+      <span>ILLUSTRATIVE LIBRARY · SAMPLE COUNTS</span>
+    </div>
+    <div class="game-cards">
+      {games.map((game, i) => (
+        <article class={`game-card game-color-${i}`}>
+          <div class="abstract-cover" aria-hidden="true">
+            <span>{game.glyph}</span>
+            <i></i>
+          </div>
+          <div class="game-card-copy">
+            <h3>{game.name}</h3>
+            <span class="watching">
+              <i></i> Watching
+            </span>
+            <p>
+              <strong>{game.count}</strong> example snapshots
+            </p>
+            <small>Last snapshot {game.time}</small>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+  <p class="small-copy">
+    Folder discovery definitions are included for these titles. That is not a
+    guarantee of compatibility with every edition or platform. Save Scum is
+    independent of game publishers and Valve.
+  </p>
+</section>

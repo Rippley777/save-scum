@@ -1,0 +1,102 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+import Icon from "../components/Icon.astro";
+import { site } from "../config/site";
+---
+
+<ContentLayout
+  title="Get Save Scum — Downloads & Platform Status"
+  heading="A second chance is in the works."
+  description="Check Save Scum release availability and platform status. Version 0.1.0 has a local macOS development build; public Windows and Linux releases are not verified."
+  breadcrumbs={[{ name: "Get Save Scum", href: "/download/" }]}
+  eyebrow={`SAVE SCUM / VERSION ${site.version}`}
+>
+  <div class="release-status">
+    <h2>
+      {site.downloadUrl
+        ? `Download for ${site.downloadPlatform}`
+        : "Public installers are not available here yet."}
+    </h2>
+    <p>
+      {site.downloadUrl
+        ? "Use the verified release link below. Review platform requirements and release notes before installing."
+        : "Save Scum is a working desktop application in development. A local macOS build exists, but it is not a signed, notarized public release. We are keeping the release status clear instead of giving you a download button that goes nowhere."}
+    </p>
+    <div class="actions">
+      {site.downloadUrl ? (
+        <a class="button" href={site.downloadUrl}>
+          Download Save Scum <Icon name="down" size={17} />
+        </a>
+      ) : (
+        <a class="button" href={site.developmentUrl}>
+          Follow Rippley Labs on GitHub <Icon name="external" size={16} />
+        </a>
+      )}
+      {site.githubUrl && (
+        <a class="button secondary" href={site.githubUrl}>
+          View source <Icon name="code" size={16} />
+        </a>
+      )}
+    </div>
+  </div>
+  <h2>Platform status</h2>
+  <div class="platform-grid">
+    <section class="platform-card">
+      <h3>macOS</h3>
+      <p>
+        Local development build documented. Public signing and notarization are
+        not confirmed.
+      </p>
+    </section>
+    <section class="platform-card">
+      <h3>Windows</h3>
+      <p>
+        Target platform. Build and test workflows exist; release verification is
+        pending.
+      </p>
+    </section>
+    <section class="platform-card">
+      <h3>Linux</h3>
+      <p>
+        Target platform. Verification is pending. Tray and hotkeys depend on the
+        desktop environment.
+      </p>
+    </section>
+  </div>
+  <h2>Free and local-first</h2>
+  <p>
+    Save Scum is intended to be free, with no account or subscription. Your
+    backups remain on storage you control. There is no hosted service you need
+    to keep paying to reach your own save history.
+  </p>
+  <p>
+    {site.githubUrl ? (
+      <>
+        The project source is linked above. Check the repository’s license for
+        reuse terms.
+      </>
+    ) : (
+      <>
+        A public Save Scum source repository and license are not linked yet. The
+        GitHub button goes to the developer’s profile; it is not an installer or
+        a promise of source availability.
+      </>
+    )}
+  </p>
+  <h2>Already have a source checkout?</h2>
+  <p>
+    Follow the <a href="/docs/#development">local development instructions</a>.
+    Native builds need Node.js, Rust, and the Tauri prerequisites for your
+    operating system. A browser preview demonstrates the interface but cannot
+    protect real game saves.
+  </p>
+  <h2>Protect your saves today</h2>
+  <p>
+    You do not have to wait for a release to start keeping backups. Exit the
+    game, copy its entire save directory to a dated folder, and keep another
+    copy on separate storage.{" "}
+    <a href="/guides/how-to-back-up-game-saves/">
+      Our PC save backup guide walks through the process.
+    </a>
+  </p>
+</ContentLayout>

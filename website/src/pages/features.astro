@@ -1,0 +1,117 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+const toc = [
+  { text: "Automatic snapshots", slug: "automatic" },
+  { text: "Restore with a safety checkpoint", slug: "restore" },
+  { text: "Named checkpoints", slug: "checkpoints" },
+  { text: "The Panic Button", slug: "panic" },
+  { text: "Storage & retention", slug: "storage" },
+  { text: "Portable history", slug: "portable" },
+];
+---
+
+<ContentLayout
+  title="Game Save Backup, Snapshots & Restore Features | Save Scum"
+  heading="A little history. A lot of second chances."
+  description="Explore automatic game save snapshots, protected checkpoints, reversible restore, panic saves, and compressed local storage in Save Scum."
+  breadcrumbs={[{ name: "Features", href: "/features/" }]}
+  toc={toc}
+  eyebrow="THE TOOLKIT"
+>
+  <p>
+    Save Scum watches local game save directories and keeps their history
+    outside the game’s own save slots. The interface is a library and a
+    timeline. Underneath, a Rust engine takes care of capturing, verifying, and
+    restoring files.
+  </p>
+  <h2 id="automatic">Automatic game save backups</h2>
+  <p>
+    When a configured folder changes, the watcher waits for a quiet period and
+    captures the new file state. Changes are batched, ignored files are skipped,
+    and unchanged automatic snapshots are suppressed. A second scan checks that
+    files did not change during capture; unstable captures are withheld instead
+    of recording an incomplete version.
+  </p>
+  <p>
+    Automatic capture requires the desktop app to be running and monitoring
+    enabled. A snapshot contains what the game has written to disk, not progress
+    still held in memory.{" "}
+    <a href="/how-it-works/">Walk through setup and the first snapshot.</a>
+  </p>
+  <h2 id="restore">A restore with its own way back</h2>
+  <p>
+    Pick a snapshot, compare changed files, and review the target save folder.
+    Close the game before confirming. Save Scum verifies and stages the selected
+    files, captures your current state as a protected safety checkpoint, and
+    then replaces the live directory.
+  </p>
+  <p>
+    Original files are also kept in a recovery directory beside the save folder.
+    Keep those until you have loaded the game and checked your progress. Errors
+    and interrupted restores are surfaced for review; no desktop utility can
+    promise success through every filesystem or hardware failure.
+  </p>
+  <p>
+    <a href="/guides/how-to-restore-overwritten-game-save/">
+      Already overwrote a save? Check which recovery options you actually have.
+    </a>
+  </p>
+  <h2 id="checkpoints">Name the moment you want to keep</h2>
+  <p>
+    Manual checkpoints, notes, labels, and favorites make a long history useful.
+    Mark “Before final boss,” “Good ending,” or “Before mod install.” These
+    checkpoints are protected from automatic retention cleanup.
+  </p>
+  <p>
+    A manual checkpoint can intentionally preserve unchanged contents. Because
+    file data is shared where possible, another named moment does not require
+    blindly duplicating every file.
+  </p>
+  <h2 id="panic">The Panic Button</h2>
+  <p>
+    <strong>Ctrl + Shift + F12</strong> triggers a Panic Save for the configured
+    target. Use the tray or app if your desktop environment does not support the
+    shortcut or another application has claimed it. Global bindings are fixed in
+    version 0.1.0.
+  </p>
+  <p>
+    Select the panic target deliberately before a session. The app can also
+    choose from monitored games using running-process hints and recent save
+    activity. Panic captures are protected from automatic retention. They still
+    need readable, stable save files and enough storage.
+  </p>
+  <h2 id="storage">Shared files. Compressed snapshots.</h2>
+  <p>
+    Save Scum identifies file contents using BLAKE3 hashes and stores compressed
+    data with Zstandard. Snapshots reference the stored files they need. If{" "}
+    <code>world.sav</code> is unchanged across ten snapshots, all ten can
+    reference the same stored contents. A changed file gets a new stored
+    version.
+  </p>
+  <p>
+    This is file-level deduplication, not a promise of tiny binary patches. If a
+    game rewrites one huge save file on every save, storage can grow quickly.
+    Compression results depend on the data.
+  </p>
+  <p>
+    Per-game retention supports count, age, smart, and unlimited policies. The
+    newest snapshot, manual and safety checkpoints, panic saves, favorites,
+    protected snapshots, and labeled snapshots are kept. Eligible automatic
+    snapshots can expire. The storage limit is a soft compressed-data budget;
+    leave additional space for staging and original recovery directories.
+  </p>
+  <h2 id="portable">Take your history with you</h2>
+  <p>
+    Export a game’s history or a single snapshot as a portable{" "}
+    <code>.savescum</code> archive. Imports validate their contents before
+    committing metadata and do not overwrite the live save directory. Use a
+    separate device for an additional backup against drive failure.
+  </p>
+  <p>
+    The desktop app needs no account, cloud service, or internet connection at
+    runtime. Network filesystems and cloud synchronization are not verified
+    storage backends.{" "}
+    <a href="/docs/">Read the storage and restore documentation</a> before
+    moving an existing library.
+  </p>
+</ContentLayout>

@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
+import Icon from "../../components/Icon.astro";
+const guides = (await getCollection("guides")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Layout
+  title="Game Save Backup & Recovery Guides | Save Scum"
+  description="Practical guides to backing up PC and Steam game saves, checking recovery options after an overwrite or corruption, and understanding save version history."
+>
+  <div class="container">
+    <Breadcrumbs items={[{ name: "Guides", href: "/guides/" }]} />
+    <header class="page-hero">
+      <p class="eyebrow">FIELD NOTES FOR YOUR NEXT SAVE</p>
+      <h1>
+        Keep the progress.
+        <br />
+        Learn the way back.
+      </h1>
+      <p class="lead">
+        Useful advice before a save goes wrong—and honest options when it
+        already has. Start with your files, not a download button.
+      </p>
+    </header>
+    <div class="guide-grid">
+      {guides.map((guide) => (
+        <article class="guide-card">
+          <span class="micro-label">{guide.data.category}</span>
+          <h2>
+            <a href={`/guides/${guide.id}/`}>{guide.data.title}</a>
+          </h2>
+          <p>{guide.data.summary}</p>
+          <a class="text-link" href={`/guides/${guide.id}/`}>
+            Read the guide <Icon size={16} />
+            <span class="sr-only">: {guide.data.title}</span>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>

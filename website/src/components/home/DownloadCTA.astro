@@ -1,0 +1,32 @@
+---
+import Icon from "../Icon.astro";
+import { site } from "../../config/site";
+---
+
+<section class="container final-cta">
+  <span class="cta-symbol" aria-hidden="true">
+    ↶
+  </span>
+  <p class="eyebrow">MAKE THE CHOICE. KEEP THE CHECKPOINT.</p>
+  <h2>
+    Your next bad decision
+    <br />
+    deserves a backup.
+  </h2>
+  <p>Free. Local-first. Built for another attempt.</p>
+  <div class="actions">
+    <a href="/download/" class="button">
+      {site.downloadUrl ? "Download Save Scum" : "Get Save Scum"}{" "}
+      <Icon name="down" size={17} />
+    </a>
+    <a href={site.githubUrl || site.developmentUrl} class="text-link">
+      {site.githubUrl ? "View on GitHub" : "Follow Rippley Labs on GitHub"}{" "}
+      <Icon name="external" size={15} />
+    </a>
+  </div>
+  <small>
+    {site.downloadUrl
+      ? `Available for ${site.downloadPlatform}.`
+      : "In development. Check platform and release availability before installing."}
+  </small>
+</section>

@@ -1,0 +1,42 @@
+---
+import Logo from "./Logo.astro";
+import { site } from "../config/site";
+const links = [
+  { name: "Documentation", href: "/docs/" },
+  { name: "FAQ", href: "/faq/" },
+  { name: "Release status", href: "/download/" },
+  ...(site.githubUrl
+    ? [
+        { name: "GitHub", href: site.githubUrl },
+        { name: "Issues", href: `${site.githubUrl.replace(/\/$/, "")}/issues` },
+        {
+          name: "Releases",
+          href: `${site.githubUrl.replace(/\/$/, "")}/releases`,
+        },
+      ]
+    : []),
+  ...(site.licenseUrl ? [{ name: "License", href: site.licenseUrl }] : []),
+];
+---
+
+<footer class="site-footer container">
+  <div class="footer-top">
+    <div>
+      <Logo small />
+      <p>Because autosave is not a backup strategy.</p>
+    </div>
+    <nav aria-label="Footer navigation">
+      {links.map((link) => (
+        <a href={link.href}>{link.name}</a>
+      ))}
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>
+      © {new Date().getFullYear()} <a href={site.publisherUrl}>Rippley Labs</a>
+    </span>
+    <span>
+      Built for the “what if?” people. <span aria-hidden="true">↶</span>
+    </span>
+  </div>
+</footer>

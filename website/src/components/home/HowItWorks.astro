@@ -1,0 +1,55 @@
+---
+import Icon from "../Icon.astro";
+const steps = [
+  [
+    "Choose your game",
+    "Detect a known location or point Save Scum at the folder your game actually saves into. Confirm the first snapshot.",
+  ],
+  [
+    "Keep playing",
+    "The desktop app watches for file changes and preserves snapshots after writes settle. Keep it running in the background.",
+  ],
+  [
+    "Rewrite history",
+    "Close the game, browse your snapshots, review file changes, and restore the moment you want back.",
+  ],
+];
+---
+
+<section
+  class="section container"
+  id="how-it-works"
+  aria-labelledby="how-title"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow section-label">04 / LESS SETUP. MORE SECOND CHANCES.</p>
+      <h2 id="how-title">Pick a folder. Keep your history.</h2>
+    </div>
+    <a href="/how-it-works/" class="text-link">
+      Walk through the process <Icon size={16} />
+    </a>
+  </div>
+  <ol class="steps-grid">
+    {steps.map(([title, description], i) => (
+      <li>
+        <span class="step-number">0{i + 1}</span>
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </li>
+    ))}
+  </ol>
+  <div
+    class="process-flow"
+    aria-label="Game writes to save directory, Save Scum captures a snapshot, snapshot history enables restore"
+  >
+    {["GAME", "SAVE DIRECTORY", "SAVE SCUM", "SNAPSHOT HISTORY", "RESTORE"].map(
+      (label, i) => (
+        <>
+          <span class:list={{ "flow-active": i === 2 }}>{label}</span>
+          {i < 4 && <Icon size={16} />}
+        </>
+      ),
+    )}
+  </div>
+</section>

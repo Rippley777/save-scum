@@ -1,0 +1,68 @@
+---
+import Icon from "../Icon.astro";
+---
+
+<section class="section container problem-grid" aria-labelledby="problem-title">
+  <div>
+    <p class="eyebrow section-label">01 / A BETTER SAVE SYSTEM</p>
+    <h2 id="problem-title">
+      Autosave isn’t
+      <br />
+      version control.
+    </h2>
+    <p class="section-copy">
+      Games are very good at saving your progress. They’re significantly less
+      good at saving the progress you actually wanted.
+    </p>
+    <p class="section-copy">
+      Save Scum gives you restore points instead of a single, constantly
+      overwritten state. It can bring back a save you captured earlier—not one
+      that was never backed up.
+    </p>
+    <a class="text-link" href="/guides/game-save-version-control/">
+      Meet your save file’s version history <Icon size={16} />
+    </a>
+  </div>
+  <div class="history-comparison">
+    <div class="history-old">
+      <span class="micro-label">WITHOUT A HISTORY</span>
+      <div class="overwrite-chain">
+        <span>SAVE</span>
+        <span aria-hidden="true">→</span>
+        <span>SAVE</span>
+        <span aria-hidden="true">→</span>
+        <span class="oops">Oops.</span>
+      </div>
+      <p>One slot. One version. No take-backs.</p>
+    </div>
+    <div class="history-new">
+      <span class="micro-label">
+        <Icon name="history" size={14} /> WITH SAVE SCUM
+      </span>
+      <div
+        class="branch-history"
+        aria-label="Example save history: three automatic saves, a before-boss checkpoint, and a panic save"
+      >
+        <span>
+          <i></i>10:00
+        </span>
+        <span>
+          <i></i>10:15
+        </span>
+        <span class="checkpoint-node">
+          <i>★</i>Before boss
+        </span>
+        <span>
+          <i></i>11:08
+        </span>
+        <span class="panic-node">
+          <i>!</i>Panic save
+        </span>
+      </div>
+      <p>
+        Jump back to the moment you meant to keep.{" "}
+        <Icon name="history" size={17} />
+      </p>
+    </div>
+  </div>
+</section>

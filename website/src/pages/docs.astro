@@ -1,0 +1,170 @@
+---
+import ContentLayout from "../layouts/ContentLayout.astro";
+const toc = [
+  { text: "Choose the right folder", slug: "folders" },
+  { text: "Restore safely", slug: "restore" },
+  { text: "Storage & exports", slug: "storage" },
+  { text: "Shortcuts", slug: "shortcuts" },
+  { text: "Build from source", slug: "development" },
+  { text: "Troubleshooting", slug: "troubleshooting" },
+];
+---
+
+<ContentLayout
+  title="Save Scum Documentation — Setup, Restore & Local Storage"
+  heading="Know what you’re keeping."
+  description="Learn how to choose the right save folder, use checkpoints and panic shortcuts, restore safely, export archives, and run Save Scum from a source checkout."
+  breadcrumbs={[{ name: "Documentation", href: "/docs/" }]}
+  toc={toc}
+  eyebrow="THE OWNER’S MANUAL"
+>
+  <p>
+    This documentation describes version 0.1.0.{" "}
+    <a href="/download/">Check release status</a> for verified platforms and
+    installers. The desktop app performs real filesystem operations; the browser
+    demo uses simulated saves.
+  </p>
+  <h2 id="folders">Choose the right save folder</h2>
+  <p>
+    Use <strong>Add game</strong> to detect a known location or browse to the
+    existing directory that holds your progress. Steam install detection can
+    fill in a game name without locating its saves. In that case, you still need
+    to select the real save directory.
+  </p>
+  <p>
+    Make an in-game save and check recent file changes. Read the path and file
+    count before accepting the initial snapshot. If a restored game loads
+    unchanged progress, review this path first. <strong>Fix save folder</strong>{" "}
+    or <strong>Change save folder</strong> lets you detect and review a
+    corrected location. Existing history remains available, and a fresh
+    checkpoint is created for the corrected folder.
+  </p>
+  <p>
+    Empty folders, symbolic links, unsafe paths, overlapping watched roots, and
+    folders that overlap snapshot storage are rejected.{" "}
+    <a href="/games/">Read the game location reference.</a>
+  </p>
+  <h2 id="restore">Restore with the game closed</h2>
+  <p>
+    The restore dialog previews file changes and asks you to confirm the game is
+    closed. Detected running games are blocked, but process detection is only a
+    hint: actually exit the game. The engine verifies the snapshot, stages its
+    files, preserves a protected safety checkpoint, and swaps the directories.
+  </p>
+  <p>
+    Afterward, review the result and load the game to verify the desired
+    progress. A snapshot is a copy of files, not proof that a particular game
+    version or mod combination will accept them.
+  </p>
+  <p>
+    Original files are also retained beside the save directory in a{" "}
+    <code>.save-scum-recovery-&lt;uuid&gt;</code> folder. The safety checkpoint
+    records the recovery path. Remove it manually only after verifying the
+    restored game. Recovery directories are outside the displayed compressed
+    storage total and retention cleanup.
+  </p>
+  <p>
+    If the process was interrupted, reopen Save Scum and review the recovery
+    outcome. Monitoring may be paused for inspection. Do not repeatedly restore
+    over uncertain files. Keep independent copies while diagnosing the problem.
+  </p>
+  <h2 id="storage">Storage, retention, and portable archives</h2>
+  <p>
+    Open <strong>Settings → Storage</strong> for the library location. It
+    includes a SQLite metadata database, a lock file, and compressed
+    content-addressed blobs. On macOS, the normal app-data directory is{" "}
+    <code>~/Library/Application Support/app.savescum.desktop</code>.
+  </p>
+  <p>
+    Use the app’s export workflow to produce a portable <code>.savescum</code>{" "}
+    archive of a game’s history or a single snapshot. Imported history is
+    validated before its metadata is committed and does not automatically
+    replace the game’s live files.
+  </p>
+  <p>
+    To move a whole library manually, quit the app, copy the entire library
+    directory, and launch with <code>SAVE_SCUM_DATA_DIR</code> set to the new
+    location. Pointing at an empty path creates a separate library; it does not
+    migrate your existing one. Network filesystems have not been validated.
+  </p>
+  <p>
+    Retention can remove eligible automatic snapshots. Manual, panic, safety,
+    labeled, favorite, protected, and newest snapshots are retained. The storage
+    limit is a soft compressed-blob budget, not a disk quota. Leave room for
+    staging and recovery copies. Integrity verification reports damaged or
+    orphaned data without silently deleting it.
+  </p>
+  <h2 id="shortcuts">Keep a checkpoint within reach</h2>
+  <ul>
+    <li>
+      <strong>Ctrl + Shift + F12:</strong> Panic Save.
+    </li>
+    <li>
+      <strong>Ctrl + Shift + S:</strong> create a checkpoint for the panic
+      target.
+    </li>
+    <li>
+      <strong>Ctrl + Shift + Space:</strong> show the app.
+    </li>
+    <li>
+      <strong>Cmd/Ctrl + K:</strong> search inside the app.
+    </li>
+    <li>
+      <strong>Cmd/Ctrl + comma:</strong> open settings.
+    </li>
+  </ul>
+  <p>
+    Global bindings are fixed in this version. Conflicts are reported in the
+    interface. Tray and UI actions remain available when shortcut registration
+    fails. Linux behavior, especially under Wayland, depends on the desktop
+    environment.
+  </p>
+  <h2 id="development">Run from a source checkout</h2>
+  <p>
+    These commands are for people who already have the application source. They
+    run from the desktop app’s root directory, not the website directory.
+    Prerequisites are Node.js 20.19+ (22 recommended), Rust 1.90, npm, and the{" "}
+    <a href="https://v2.tauri.app/start/prerequisites/">
+      official Tauri platform prerequisites
+    </a>
+    .
+  </p>
+  <pre><code>npm ci
+npm run desktop</code></pre>
+  <p>For the simulated browser interface:</p>
+  <pre><code>npm run dev</code></pre>
+  <p>
+    The browser demo runs at local port 1437. It cannot watch, restore, import,
+    or export real files. A target-platform package can be built with{" "}
+    <code>npm run tauri -- build</code>; signing, notarization, and public
+    distribution are separate release tasks.
+  </p>
+  <h2 id="troubleshooting">When something does not look right</h2>
+  <ul>
+    <li>
+      <strong>No new snapshot:</strong> confirm monitoring is enabled, the app
+      is running, the directory is reachable, files have changed, and free space
+      is available.
+    </li>
+    <li>
+      <strong>Capture failed:</strong> inspect the reported error. A game may
+      still be writing, permissions may block access, or the storage budget may
+      be reached.
+    </li>
+    <li>
+      <strong>Restored progress looks unchanged:</strong> verify the save path,
+      selected checkpoint, game profile, and cloud synchronization behavior.
+    </li>
+    <li>
+      <strong>Integrity warning:</strong> keep your current files, preserve the
+      library, and use an independent archive if available.
+    </li>
+  </ul>
+  <p>
+    For a save that was already lost before protection, start with the{" "}
+    <a href="/guides/how-to-restore-overwritten-game-save/">
+      overwritten-save recovery guide
+    </a>
+    . Save Scum cannot reconstruct versions it never captured.
+  </p>
+</ContentLayout>
