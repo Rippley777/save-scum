@@ -60,3 +60,8 @@ jobs:
           output_location: ""
           skip_app_build: true
           skip_api_build: true
+      - name: Verify production page
+        if: github.event_name != 'pull_request'
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-delay 10 --retry-all-errors --max-time 60 'https://kind-field-075301510.5.azurestaticapps.net' -o "$RUNNER_TEMP/azure-smoke"
+          grep -Fq 'Save Scum' "$RUNNER_TEMP/azure-smoke"
