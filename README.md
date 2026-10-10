@@ -26,17 +26,29 @@ Open **http://127.0.0.1:1437**. Browser mode is explicitly labeled **Interactive
 ## Build
 
 ```sh
-npm run tauri -- build
+npm run build:desktop  # conventional native Tauri build
+npm run release:local # archive previous builds, verify a fresh host build, promote
 ```
 
-Build on the target operating system. On macOS, an app-only build is:
+Release artifacts live in `builds/current`, with verified timestamped history in
+`builds/archive`, SHA-256 checksums, and a release manifest. Failed releases keep
+the previous build intact. The manual **Build Save Scum release** GitHub Actions
+workflow builds Windows x86-64, Linux x86-64, macOS ARM64, Intel, and Universal 2.
+Dispatch it with `npm run release:ci` after committing and pushing your changes,
+or from GitHub's Actions UI. Building does not publish a GitHub Release.
+
+See [docs/BUILDING.md](docs/BUILDING.md) for prerequisites, platform commands,
+version synchronization, CI artifacts, signing, and recovery. On macOS, the
+existing app-only build remains available:
 
 ```sh
 npm run tauri -- build --bundles app
 open "target/release/bundle/macos/Save Scum.app"
 ```
 
-The local build is not a notarized distribution release. Windows and Linux compilation/tests are configured in `.github/workflows/ci.yml`; they still need to be run on those platforms. On Linux, install WebKitGTK 4.1 and an AppIndicator library. Global shortcut and tray support depends on the desktop environment, particularly under Wayland.
+Development artifacts are unsigned (ad-hoc signed on macOS) and not notarized.
+Gatekeeper may warn about downloads. On Linux, global shortcut and tray support
+depends on the desktop environment, particularly under Wayland.
 
 ## What is implemented
 
@@ -183,3 +195,7 @@ The browser version includes House Edge page/view tracking, anonymous sessions, 
 Create a House Edge project with key `save-scum` and allow this site's exact origin. Set `VITE_HOUSE_EDGE_KEY` to its **browser ingestion key** and `VITE_HOUSE_EDGE_ENDPOINT` to your collector URL ending in `/api/collect`, using `.env.local` or your build environment. `.env.example` lists the settings. Rebuild and redeploy the browser version, then check Live Activity for `page_view` and `session_start` after about five seconds.
 
 Tracking is off when the key or endpoint is missing, and development requires `VITE_HOUSE_EDGE_TRACK_DEVELOPMENT=true`. Do Not Track is respected. The SDK is installed from the checked-in `vendor/house-edge-analytics-0.1.1.tgz`, so independent builds need no sibling House Edge checkout. Commit the tarball with its package manifest and lockfile.
+
+## macOS Release
+
+Run `npm run release:mac:check` to validate prerequisites, then `npm run release:desktop` for Developer ID signed, notarized ARM64, Intel and universal apps/DMGs. See [macOS release setup, credentials, outputs and verification](docs/MACOS_RELEASE.md). Existing development and Windows/Linux commands remain available.

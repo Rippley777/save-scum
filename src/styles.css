@@ -2021,6 +2021,9 @@ main {
   color: #98b47f;
   height: 37px;
 }
+.library-shortcut {
+  margin-top: 8px;
+}
 .notice {
   display: flex;
   align-items: flex-start;

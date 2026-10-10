@@ -1,0 +1,189 @@
+name: Build Save Scum release
+
+on:
+  workflow_dispatch:
+
+# Building and publishing are separate. This workflow never creates a GitHub Release.
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: save-scum-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run version:check
+      - name: Locate previous successful release
+        id: previous
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const query = {
+              ...context.repo, workflow_id: 'build-release.yml',
+              status: 'success', per_page: 100
+            };
+            if (context.ref.startsWith('refs/heads/')) query.branch = context.ref.slice('refs/heads/'.length);
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, query);
+            for (const run of runs) {
+              const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+                ...context.repo, run_id: run.id, per_page: 100
+              });
+              if (artifacts.some(a => a.name === 'save-scum-release' && !a.expired)) {
+                core.setOutput('run-id', String(run.id));
+                return;
+              }
+            }
+            core.notice('No retained previous CI release found. Local builds/archive history is unaffected.');
+      - name: Restore previous complete build
+        if: steps.previous.outputs.run-id != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: save-scum-release
+          path: builds/current
+          run-id: ${{ steps.previous.outputs.run-id }}
+          github-token: ${{ github.token }}
+      - name: Archive and verify before any native build starts
+        run: node scripts/release.mjs archive
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-baseline
+          path: |
+            builds/archive/
+            builds/archive-state.json
+          if-no-files-found: error
+          retention-days: 90
+
+  build:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            platform: windows
+            arch: x86_64
+            target: x86_64-pc-windows-msvc
+          - os: ubuntu-22.04
+            platform: linux
+            arch: x86_64
+            target: x86_64-unknown-linux-gnu
+          # Runner labels verified against github.com/actions/runner-images.
+          - os: macos-15
+            platform: macos
+            arch: arm64
+            target: aarch64-apple-darwin
+          - os: macos-15-intel
+            platform: macos
+            arch: x86_64
+            target: x86_64-apple-darwin
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@1.90.0
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+      - name: Linux packaging prerequisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libfuse2 rpm
+      - run: npm ci
+      - run: npm run release:local -- --platform ${{ matrix.platform }} --arch ${{ matrix.arch }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: target-${{ matrix.platform }}-${{ matrix.arch }}
+          path: builds/current/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Retain failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ matrix.platform }}-${{ matrix.arch }}
+          path: builds/logs/
+          if-no-files-found: warn
+
+  universal:
+    # Universal packaging starts only after both individual macOS builds exist.
+    needs: build
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@1.90.0
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: Swatinem/rust-cache@v2
+      - run: npm ci
+      # Tauri combines both native binaries with lipo, then bundles the Universal app.
+      - run: npm run release:local -- --platform macos --arch universal
+      - uses: actions/upload-artifact@v4
+        with:
+          name: target-macos-universal
+          path: builds/current/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Retain failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-macos-universal
+          path: builds/logs/
+          if-no-files-found: warn
+
+  assemble:
+    needs: [prepare, build, universal]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-baseline
+          path: builds
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: target-*
+          path: builds/incoming
+          merge-multiple: false
+      - name: Verify complete matrix and promote
+        run: node scripts/release.mjs assemble --from builds/incoming
+      - uses: actions/upload-artifact@v4
+        with:
+          name: save-scum-release
+          path: builds/current/
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: save-scum-build-history
+          path: |
+            builds/archive/
+            builds/archive-state.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Retain assembly logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-assembly
+          path: builds/logs/
+          if-no-files-found: warn

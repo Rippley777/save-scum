@@ -56,6 +56,7 @@ import {
   Zap,
 } from "lucide-react";
 import { listen } from "@tauri-apps/api/event";
+import { homeDir, join } from "@tauri-apps/api/path";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { bytes, catalog, date, desktop, relative, request } from "./api";
 import type {
@@ -89,6 +90,7 @@ const retentionOptions = [
   ["smart", "Smart retention"],
   ["unlimited", "Unlimited"],
 ];
+const macOS = desktop && /Macintosh|Mac OS X/.test(navigator.userAgent);
 const kindLabel = (s: Snapshot) =>
   s.kind === "panic"
     ? "Panic save"
@@ -418,16 +420,22 @@ export default function App() {
     setLabel("");
     setModal("checkpoint");
   };
-  const chooseFolder = async () => {
+  const chooseFolder = async (startInLibrary = false) => {
     if (!desktop) {
       setPath("~/Games/MyGame/Saves");
       return;
     }
     try {
+      const libraryPath = macOS
+        ? await join(await homeDir(), "Library")
+        : undefined;
       const result = await open({
         directory: true,
         multiple: false,
         title: "Choose game save folder",
+        defaultPath: startInLibrary
+          ? libraryPath
+          : folderInfo?.path || libraryPath,
       });
       if (typeof result === "string") setPath(result);
     } catch (e) {
@@ -472,6 +480,7 @@ export default function App() {
         multiple: false,
         title:
           "Choose a save folder for imported history (files will not change)",
+        defaultPath: macOS ? await join(await homeDir(), "Library") : undefined,
       });
       if (typeof target !== "string") return;
       await act(
@@ -2159,6 +2168,16 @@ export default function App() {
                 </button>
               </div>
             </label>
+            {macOS && (
+              <button
+                type="button"
+                className="text-button library-shortcut"
+                onClick={() => void chooseFolder(true)}
+              >
+                <FolderOpen size={14} />
+                Browse ~/Library (hidden in macOS)
+              </button>
+            )}
             <div className="notice" role="status">
               <span>
                 {folderError ||
@@ -2316,6 +2335,16 @@ export default function App() {
               </button>
             </div>
           </label>
+          {macOS && (
+            <button
+              type="button"
+              className="text-button library-shortcut"
+              onClick={() => void chooseFolder(true)}
+            >
+              <FolderOpen size={14} />
+              Browse ~/Library (hidden in macOS)
+            </button>
+          )}
           <div className="notice" role="status">
             <span>
               {folderError ||

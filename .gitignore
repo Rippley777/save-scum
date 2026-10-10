@@ -1,6 +1,7 @@
 node_modules/
 dist/
 target/
+builds/
 .DS_Store
 test-results/
 playwright-report/
@@ -10,3 +11,13 @@ src-tauri/gen/schemas/
 
 .env*
 !.env.example
+
+# Production macOS release output and local Apple credentials
+/macos-releases/
+*.p8
+*.p12
+*.pfx
+*.keychain
+*.keychain-db
+.env.signing*
+.env.notarization*
