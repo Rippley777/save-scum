@@ -22,7 +22,7 @@
   "dependencies": {
     "@house-edge/analytics": "file:vendor/house-edge-analytics-0.1.1.tgz",
     "@tailwindcss/vite": "4.3.3",
-    "astro": "7.3.5",
+    "astro": "7.4.7",
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {
